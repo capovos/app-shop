@@ -1,0 +1,132 @@
+# Instalar XAMPP
+# Instalar Composer
+cd XAMPP
+
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+php composer-setup.php
+php -r "unlink('composer-setup.php');"
+
+
+# Editar .bash_profile en Mac
+cd /Users/charly
+ls -lia
+vi .bash_profile
+
+pegar lo siguiente:
+export PATH="~/.composer/vendor/bin:$PATH"
+alias composer='/Applications/composer.phar'
+
+
+# Crear Project
+En XAMPP:
+composer create-project --prefer-dist laravel/laravel app-shop 5.5.*
+
+
+
+# Agregar permisos a carpeta storage
+cd Applications/XAMPP/xamppfiles/htdocs/app-shop/
+sudo chmod -R 777 storage/
+
+
+# Agregar sitio a vhost y a hosts
+
+Editar el archivo httpd-vhosts.conf:
+En windows:
+C:\xampp\apache\conf\extra\httpd-vhosts.conf
+
+pegar lo siguiente:
+<VirtualHost *:80>
+    DocumentRoot "C:/xampp-7/htdocs/app-shop/public/"
+    ServerName app-shop.dev
+</VirtualHost>
+
+
+En Mac: 
+vi /Applications/XAMPP/etc/extra/httpd-vhosts.conf
+
+pegar lo siguiente:
+<VirtualHost *:80>
+    DocumentRoot "/Applications/XAMPP/xamppfiles/htdocs/app-shop/public/"
+    ServerName app-shop.dev
+</VirtualHost>
+
+
+Habilitar host descomentar lines include:
+vi /Applications/XAMPP/xamppfiles/etc/httpd.conf
+
+# Virtual hosts
+Include etc/extra/httpd-vhosts.conf
+
+
+Editar el archivo hosts:
+En Windows:
+C:\Windows\System32\drivers\etc\hosts
+127.0.0.1 	app-shop.dev
+
+
+En Mac:
+sudo vi /etc/hosts
+127.0.0.1 	app-shop.dev
+
+
+
+
+
+#Corregir error
+Agregar en app-shop/app/providers/AppServicesProviders
+
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        Schema::defaultStringLength(191);
+    }
+
+
+#Crear autenticación
+php artisan make:auth 
+php artisan migrate
+
+
+# Git y Github
+https://series.programacionymas.com/aprende-a-usar-git
+https://git-scm.com/downloads
+https://github.com/
+
+Ingrear a github y agregar un repositorio con el nombre app-shop, agreagr descripcion.
+
+echo "# app-shop" >> README.md
+git init
+git add README.md
+git add -A
+git commit -m "first commit"
+git remote add origin https://github.com/capovos/app-shop.git
+git push -u origin master
+
+
+
+
+# Material KIT template
+https://www.creative-tim.com/product/material-kit
+
+
+
+
+
+
+
+
+
+
+
+
+
